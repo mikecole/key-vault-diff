@@ -80,7 +80,7 @@ public class SecretCommand
 
         if (results.Any(r => r.Operation == DiffOperation.Add))
         {
-            Console.WriteLine($"[A] Add all new secrets to {destination.VaultUri.Host}");
+            Console.WriteLine($"[A] Add all new secrets to {source.VaultUri.Host}");
         }
         Console.WriteLine("[Q] Quit");
 
