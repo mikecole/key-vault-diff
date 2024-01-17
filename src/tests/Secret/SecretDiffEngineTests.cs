@@ -1,9 +1,6 @@
-using Azure.Identity;
 using Azure.Security.KeyVault.Certificates;
-using Azure.Security.KeyVault.Secrets;
 using cole.key_vault_diff.Secret;
 using FluentAssertions;
-using tests.Utility;
 
 namespace tests.Secret;
 

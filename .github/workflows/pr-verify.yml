@@ -1,0 +1,33 @@
+name: pr-verify
+
+on:
+  pull_request:
+    branches: main
+  workflow_dispatch:
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    name: pr-verify
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Dot Net
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ vars.DOTNET_VERSION }}
+
+      - name: Restore Dependencies
+        run: dotnet restore src/
+
+      - name: Build
+        run: dotnet build src/ -c Release
+
+      - name: Start containers
+        run: docker-compose up -d
+
+      - name: Run Tests
+        run: dotnet test src/ -c Release
+
+      

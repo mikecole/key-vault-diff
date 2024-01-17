@@ -80,30 +80,30 @@ public class SecretCommand
 
         if (results.Any(r => r.Operation == DiffOperation.Add))
         {
-            Console.WriteLine($"[A] Add all new secrets to {destination.VaultUri.Host}");
+            Console.WriteLine($"[A] Add all new secrets to {source.VaultUri.Host}");
         }
         Console.WriteLine("[Q] Quit");
 
-        var input = Console.ReadKey(true);
-
-        switch (input.Key)
-        {
-            case ConsoleKey.Q:
-                Console.WriteLine("Quitting...");
-                break;
-            case ConsoleKey.A:
-                Console.WriteLine("Adding...");
-                foreach (var secret in results.Where(r => r.Operation == DiffOperation.Add))
-                {
-                    Console.WriteLine($"Writing {secret.KeyName}...");
-                    var value = await source.GetSecretAsync(secret.KeyName);
-                    await destination.SetSecretAsync(secret.KeyName, value.Value.Value);
-                }
-                await RunAsync();
-                break;
-            default:
-                Console.WriteLine("Unrecognized. Quitting...");
-                break;
-        }
+        // var input = Console.ReadKey(true);
+        //
+        // switch (input.Key)
+        // {
+        //     case ConsoleKey.Q:
+        //         Console.WriteLine("Quitting...");
+        //         break;
+        //     case ConsoleKey.A:
+        //         Console.WriteLine("Adding...");
+        //         foreach (var secret in results.Where(r => r.Operation == DiffOperation.Add))
+        //         {
+        //             Console.WriteLine($"Writing {secret.KeyName}...");
+        //             var value = await source.GetSecretAsync(secret.KeyName);
+        //             await destination.SetSecretAsync(secret.KeyName, value.Value.Value);
+        //         }
+        //         await RunAsync();
+        //         break;
+        //     default:
+        //         Console.WriteLine("Unrecognized. Quitting...");
+        //         break;
+        // }
     }
 }
