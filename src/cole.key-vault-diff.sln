@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cole.key-vault-diff", "cole.key-vault-diff\cole.key-vault-diff.csproj", "{DBD56299-1929-48C2-A061-8156725F0ABD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.csproj", "{3761D519-9789-4FD0-8F43-7B9260D3C358}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBD56299-1929-48C2-A061-8156725F0ABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBD56299-1929-48C2-A061-8156725F0ABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBD56299-1929-48C2-A061-8156725F0ABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBD56299-1929-48C2-A061-8156725F0ABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3761D519-9789-4FD0-8F43-7B9260D3C358}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3761D519-9789-4FD0-8F43-7B9260D3C358}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3761D519-9789-4FD0-8F43-7B9260D3C358}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3761D519-9789-4FD0-8F43-7B9260D3C358}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
