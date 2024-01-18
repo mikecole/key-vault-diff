@@ -6,6 +6,8 @@
     <RootNamespace>cole.key_vault_diff</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>cole.key-vault-diff</ToolCommandName>
   </PropertyGroup>
 
   <ItemGroup>
