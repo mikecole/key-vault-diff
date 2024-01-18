@@ -4,6 +4,7 @@ using tests.Utility;
 
 namespace tests.Secret;
 
+[Collection("lowkey-vault Faked Tests")]
 public abstract class SecretsTestBase
 {
     protected async Task<(SecretClient SourceClient, SecretClient DestinationClient)> GetCleanVaults()
