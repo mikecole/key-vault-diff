@@ -9,7 +9,14 @@ public class ConsoleWrapperStub : IConsoleWrapper
     
     public ConsoleKeyInfo ReadKey()
     {
-        throw new NotImplementedException();
+        if (!ConsoleKeyQueue.Any())
+        {
+            throw new Exception("No input keys available.");
+        }
+        
+        var result = ConsoleKeyQueue.First();
+        ConsoleKeyQueue.Remove(result);
+        return new ConsoleKeyInfo((char)result, result, false, false, false);
     }
 
     public void Write(string? value)
@@ -31,4 +38,6 @@ public class ConsoleWrapperStub : IConsoleWrapper
     {
         return _output.ToString();
     }
+
+    public List<ConsoleKey> ConsoleKeyQueue { get; set; } = new();
 }

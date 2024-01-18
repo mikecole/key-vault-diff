@@ -86,26 +86,26 @@ public class SecretCommand
         }
         _consoleWrapper.WriteLine("[Q] Quit");
 
-        // var input = Console.ReadKey(true);
-        //
-        // switch (input.Key)
-        // {
-        //     case ConsoleKey.Q:
-        //         Console.WriteLine("Quitting...");
-        //         break;
-        //     case ConsoleKey.A:
-        //         Console.WriteLine("Adding...");
-        //         foreach (var secret in results.Where(r => r.Operation == DiffOperation.Add))
-        //         {
-        //             Console.WriteLine($"Writing {secret.KeyName}...");
-        //             var value = await source.GetSecretAsync(secret.KeyName);
-        //             await destination.SetSecretAsync(secret.KeyName, value.Value.Value);
-        //         }
-        //         await RunAsync();
-        //         break;
-        //     default:
-        //         Console.WriteLine("Unrecognized. Quitting...");
-        //         break;
-        // }
+        var input = _consoleWrapper.ReadKey();
+        
+        switch (input.Key)
+        {
+            case ConsoleKey.Q:
+                _consoleWrapper.Write("Quitting...");
+                break;
+            case ConsoleKey.A:
+                _consoleWrapper.WriteLine("Adding...");
+                foreach (var secret in results.Where(r => r.Operation == DiffOperation.Add))
+                {
+                    _consoleWrapper.WriteLine($"Writing {secret.KeyName}...");
+                    var value = await source.GetSecretAsync(secret.KeyName);
+                    await destination.SetSecretAsync(secret.KeyName, value.Value.Value);
+                }
+                await RunAsync();
+                break;
+            default:
+                _consoleWrapper.Write("Unrecognized. Quitting...");
+                break;
+        }
     }
 }

@@ -1,9 +1,6 @@
-﻿using System.Text;
-using Azure.Security.KeyVault.Secrets;
-using cole.key_vault_diff;
+﻿using Azure.Security.KeyVault.Secrets;
 using cole.key_vault_diff.Secret;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
 using Moq;
 using tests.Utility;
 
@@ -24,6 +21,8 @@ public class SecretCommandTests
             Source = "source",
             Destination = "destination"
         };
+        
+        _consoleWrapper.ConsoleKeyQueue.Add(ConsoleKey.Q);
     }
     
     [Fact]
@@ -82,6 +81,50 @@ Modify  ~");
         await _sut.RunAsync();
 
         _consoleWrapper.GetOutput().Should().NotContain("[A] Add all new secrets to source.vault.azure.net");
+    }
+
+    [Fact]
+    public async Task RunAsync_QuitsWithMessage_WithQInput()
+    {
+        SetDiffResults(new List<SecretDiffResult>
+        {
+            new("Delete", DiffOperation.Delete)
+        });
+        
+        await _sut.RunAsync();
+
+        _consoleWrapper.GetOutput().Should().EndWith("Quitting...");
+    }
+    
+    [Fact]
+    public async Task RunAsync_QuitsWithMessage_WithUnexpectedInput()
+    {
+        _consoleWrapper.ConsoleKeyQueue = new() { ConsoleKey.B };
+        
+        SetDiffResults(new List<SecretDiffResult>
+        {
+            new("Delete", DiffOperation.Delete)
+        });
+        
+        await _sut.RunAsync();
+
+        _consoleWrapper.GetOutput().Should().EndWith("Unrecognized. Quitting...");
+    }
+    
+    [Fact]
+    public async Task RunAsync_CreatesNewWithMessage_WithAInput()
+    {
+        _consoleWrapper.ConsoleKeyQueue = new() { ConsoleKey.A, ConsoleKey.Q };
+        
+        SetDiffResults(new List<SecretDiffResult>
+        {
+            new("Foo", DiffOperation.Add),
+            new("Bar", DiffOperation.Add),
+        });
+        
+        await _sut.RunAsync();
+
+        _consoleWrapper.GetOutput().Should().EndWith("Unrecognized. Quitting...");
     }
 
     private void SetDiffResults(List<SecretDiffResult> results)
