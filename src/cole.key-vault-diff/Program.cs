@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 Cli.Ext.ConfigureServices(services =>
 {
+    services.AddTransient<IConsoleWrapper, ConsoleWrapper>();
     services.AddTransient<ISecretDiffEngine, SecretDiffEngine>();
 });
 

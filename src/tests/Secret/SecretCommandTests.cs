@@ -1,6 +1,9 @@
-﻿using Azure.Security.KeyVault.Secrets;
+﻿using System.Text;
+using Azure.Security.KeyVault.Secrets;
+using cole.key_vault_diff;
 using cole.key_vault_diff.Secret;
 using FluentAssertions;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
 using Moq;
 using tests.Utility;
 
@@ -10,12 +13,13 @@ public class SecretCommandTests
 {
     private readonly SecretCommand _sut;
     private readonly Mock<ISecretDiffEngine> _secretDiffEngine = new();
-
+    private readonly ConsoleWrapperStub _consoleWrapper = new();
+    
     public SecretCommandTests()
     {
         SetDiffResults(new List<SecretDiffResult>());
 
-        _sut = new (_secretDiffEngine.Object)
+        _sut = new (_secretDiffEngine.Object, _consoleWrapper)
         {
             Source = "source",
             Destination = "destination"
@@ -25,24 +29,20 @@ public class SecretCommandTests
     [Fact]
     public async Task RunAsync_ShowsComparingMessage()
     {
-        using var consoleOutput = new ConsoleOutput();
         await _sut.RunAsync();
-        consoleOutput.GetOuput().Should().StartWith("Comparing key vault secrets...");
+        _consoleWrapper.GetOutput().Should().StartWith("Comparing key vault secrets...");
     }
     
     [Fact]
     public async Task RunAsync_ShowsMessage_WhenNoResultsToCompare()
     {
-        using var consoleOutput = new ConsoleOutput();
         await _sut.RunAsync();
-        consoleOutput.GetOuput().Should().Contain("There are no items to compare.");
+        _consoleWrapper.GetOutput().Should().Contain("There are no items to compare.");
     }
     
     [Fact]
     public async Task RunAsync_ShowsOutput_WhenRun()
     {
-        using var consoleOutput = new ConsoleOutput();
-        
         SetDiffResults(new List<SecretDiffResult>
         {
             new("Add", DiffOperation.Add),
@@ -52,7 +52,7 @@ public class SecretCommandTests
         });
 
         await _sut.RunAsync();
-        consoleOutput.GetOuput().Should().Contain(@"Add     +
+        _consoleWrapper.GetOutput().Should().Contain(@"Add     +
 Delete  -
 Equals  =
 Modify  ~");
@@ -61,8 +61,6 @@ Modify  ~");
     [Fact]
     public async Task RunAsync_ShowsAddOption_WhenAddsExist()
     {
-        using var consoleOutput = new ConsoleOutput();
-        
         SetDiffResults(new List<SecretDiffResult>
         {
             new("Add", DiffOperation.Add)
@@ -70,14 +68,12 @@ Modify  ~");
         
         await _sut.RunAsync();
 
-        consoleOutput.GetOuput().Should().Contain("[A] Add all new secrets to source.vault.azure.net");
+        _consoleWrapper.GetOutput().Should().Contain("[A] Add all new secrets to source.vault.azure.net");
     }
     
     [Fact]
     public async Task RunAsync_HidesAddOption_WhenAddsDoNotExist()
     {
-        using var consoleOutput = new ConsoleOutput();
-        
         SetDiffResults(new List<SecretDiffResult>
         {
             new("Delete", DiffOperation.Delete)
@@ -85,7 +81,7 @@ Modify  ~");
         
         await _sut.RunAsync();
 
-        consoleOutput.GetOuput().Should().NotContain("[A] Add all new secrets to source.vault.azure.net");
+        _consoleWrapper.GetOutput().Should().NotContain("[A] Add all new secrets to source.vault.azure.net");
     }
 
     private void SetDiffResults(List<SecretDiffResult> results)
