@@ -7,6 +7,7 @@ Cli.Ext.ConfigureServices(services =>
 {
     services.AddTransient<IConsoleWrapper, ConsoleWrapper>();
     services.AddTransient<ISecretDiffEngine, SecretDiffEngine>();
+    services.AddTransient<ISecretWriter, SecretWriter>();
 });
 
 await Cli.RunAsync<RootCommand>();

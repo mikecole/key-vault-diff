@@ -11,12 +11,13 @@ public class SecretCommandTests
     private readonly SecretCommand _sut;
     private readonly Mock<ISecretDiffEngine> _secretDiffEngine = new();
     private readonly ConsoleWrapperStub _consoleWrapper = new();
+    private readonly Mock<ISecretWriter> _secretWriter = new();
     
     public SecretCommandTests()
     {
         SetDiffResults(new List<SecretDiffResult>());
 
-        _sut = new (_secretDiffEngine.Object, _consoleWrapper)
+        _sut = new (_secretDiffEngine.Object, _consoleWrapper, _secretWriter.Object)
         {
             Source = "source",
             Destination = "destination"
@@ -123,8 +124,13 @@ Modify  ~");
         });
         
         await _sut.RunAsync();
+        
+        _secretWriter.Verify(m => m.CreateSecret(It.Is<SecretClient>(c => c.VaultUri.ToString().Contains("source")), It.Is<SecretClient>(c => c.VaultUri.ToString().Contains("destination")), "Foo"));
+        _secretWriter.Verify(m => m.CreateSecret(It.Is<SecretClient>(c => c.VaultUri.ToString().Contains("source")), It.Is<SecretClient>(c => c.VaultUri.ToString().Contains("destination")), "Bar"));
 
-        _consoleWrapper.GetOutput().Should().EndWith("Unrecognized. Quitting...");
+        var consoleOutput = _consoleWrapper.GetOutput();
+        consoleOutput.Should().Contain("Writing Foo...");
+        consoleOutput.Should().Contain("Writing Bar...");
     }
 
     private void SetDiffResults(List<SecretDiffResult> results)

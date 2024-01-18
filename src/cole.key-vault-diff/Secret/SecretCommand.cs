@@ -9,11 +9,13 @@ public class SecretCommand
 {
     private readonly ISecretDiffEngine _engine;
     private readonly IConsoleWrapper _consoleWrapper;
+    private readonly ISecretWriter _secretWriter;
 
-    public SecretCommand(ISecretDiffEngine engine, IConsoleWrapper consoleWrapper)
+    public SecretCommand(ISecretDiffEngine engine, IConsoleWrapper consoleWrapper, ISecretWriter secretWriter)
     {
         _engine = engine;
         _consoleWrapper = consoleWrapper;
+        _secretWriter = secretWriter;
     }
 
     [CliOption(Description = "Source Key Vault Name", Required = false)]
@@ -98,8 +100,7 @@ public class SecretCommand
                 foreach (var secret in results.Where(r => r.Operation == DiffOperation.Add))
                 {
                     _consoleWrapper.WriteLine($"Writing {secret.KeyName}...");
-                    var value = await source.GetSecretAsync(secret.KeyName);
-                    await destination.SetSecretAsync(secret.KeyName, value.Value.Value);
+                    await _secretWriter.CreateSecret(source, destination, secret.KeyName);
                 }
                 await RunAsync();
                 break;
