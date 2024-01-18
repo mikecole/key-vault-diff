@@ -31,4 +31,4 @@ jobs:
         run: dotnet pack src/cole.key-vault-diff/cole.key-vault-diff.csproj /p:Version=${{ env.version_prefix }}.${{ github.run_number }} /p:PackageVersion=${{ env.version_prefix }}.${{ github.run_number }} -c Release -o package
 
       - name: Publish
-        run: dotnet nuget push package/*.nupkg
+        run: dotnet nuget push package/*.nupkg -s https://api.nuget.org/v3/index.json
