@@ -8,10 +8,14 @@ namespace cole.key_vault_diff.Secret;
 public class SecretCommand
 {
     private readonly ISecretDiffEngine _engine;
+    private readonly IConsoleWrapper _consoleWrapper;
+    private readonly ISecretWriter _secretWriter;
 
-    public SecretCommand(ISecretDiffEngine engine)
+    public SecretCommand(ISecretDiffEngine engine, IConsoleWrapper consoleWrapper, ISecretWriter secretWriter)
     {
         _engine = engine;
+        _consoleWrapper = consoleWrapper;
+        _secretWriter = secretWriter;
     }
 
     [CliOption(Description = "Source Key Vault Name", Required = false)]
@@ -32,7 +36,7 @@ public class SecretCommand
             throw new ArgumentNullException(nameof(Destination));
         }
         
-        Console.WriteLine("Comparing key vault secrets...");
+        _consoleWrapper.WriteLine("Comparing key vault secrets...");
 
         var source = new SecretClient(new Uri($"https://{Source}.vault.azure.net/"), new DefaultAzureCredential());
         var destination = new SecretClient(new Uri($"https://{Destination}.vault.azure.net/"), new DefaultAzureCredential());
@@ -41,7 +45,7 @@ public class SecretCommand
 
         if (!results.Any())
         {
-            Console.WriteLine("There are no items to compare.");
+            _consoleWrapper.WriteLine("There are no items to compare.");
             return;
         }
 
@@ -53,57 +57,56 @@ public class SecretCommand
         
         foreach (var result in results)
         {
-            Console.Write(result.KeyName.PadRight(maxKeyNameLength + 2));
+            _consoleWrapper.Write(result.KeyName.PadRight(maxKeyNameLength + 2));
 
             switch (result.Operation)
             {
                 case DiffOperation.Add:
-                    Console.Write("+");
+                    _consoleWrapper.Write("+");
                     break;
                 case DiffOperation.Delete:
-                    Console.Write("-");
+                    _consoleWrapper.Write("-");
                     break;
                 case DiffOperation.Equals:
-                    Console.Write("=");
+                    _consoleWrapper.Write("=");
                     break;
                 case DiffOperation.Modify:
-                    Console.Write("~");
+                    _consoleWrapper.Write("~");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
             
-            Console.WriteLine();
+            _consoleWrapper.WriteLine();
         }
         
-        Console.WriteLine("Options:");
+        _consoleWrapper.WriteLine("Options:");
 
         if (results.Any(r => r.Operation == DiffOperation.Add))
         {
-            Console.WriteLine($"[A] Add all new secrets to {source.VaultUri.Host}");
+            _consoleWrapper.WriteLine($"[A] Add all new secrets to {source.VaultUri.Host}");
         }
-        Console.WriteLine("[Q] Quit");
+        _consoleWrapper.WriteLine("[Q] Quit");
 
-        // var input = Console.ReadKey(true);
-        //
-        // switch (input.Key)
-        // {
-        //     case ConsoleKey.Q:
-        //         Console.WriteLine("Quitting...");
-        //         break;
-        //     case ConsoleKey.A:
-        //         Console.WriteLine("Adding...");
-        //         foreach (var secret in results.Where(r => r.Operation == DiffOperation.Add))
-        //         {
-        //             Console.WriteLine($"Writing {secret.KeyName}...");
-        //             var value = await source.GetSecretAsync(secret.KeyName);
-        //             await destination.SetSecretAsync(secret.KeyName, value.Value.Value);
-        //         }
-        //         await RunAsync();
-        //         break;
-        //     default:
-        //         Console.WriteLine("Unrecognized. Quitting...");
-        //         break;
-        // }
+        var input = _consoleWrapper.ReadKey();
+        
+        switch (input.Key)
+        {
+            case ConsoleKey.Q:
+                _consoleWrapper.Write("Quitting...");
+                break;
+            case ConsoleKey.A:
+                _consoleWrapper.WriteLine("Adding...");
+                foreach (var secret in results.Where(r => r.Operation == DiffOperation.Add))
+                {
+                    _consoleWrapper.WriteLine($"Writing {secret.KeyName}...");
+                    await _secretWriter.CreateSecret(source, destination, secret.KeyName);
+                }
+                await RunAsync();
+                break;
+            default:
+                _consoleWrapper.Write("Unrecognized. Quitting...");
+                break;
+        }
     }
 }
