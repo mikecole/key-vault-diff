@@ -7,8 +7,8 @@ namespace cole.key_vault_diff.Secret;
 [CliCommand(Description = "Secret sub-command", Parent = typeof(RootCommand))]
 public class SecretCommand
 {
-    private readonly ISecretDiffEngine _engine;
     private readonly IConsoleWrapper _consoleWrapper;
+    private readonly ISecretDiffEngine _engine;
     private readonly ISecretWriter _secretWriter;
 
     public SecretCommand(ISecretDiffEngine engine, IConsoleWrapper consoleWrapper, ISecretWriter secretWriter)
@@ -26,15 +26,9 @@ public class SecretCommand
 
     public async Task RunAsync()
     {
-        if (string.IsNullOrWhiteSpace(Source))
-        {
-            throw new ArgumentNullException(nameof(Source));
-        }
+        if (string.IsNullOrWhiteSpace(Source)) throw new ArgumentNullException(nameof(Source));
 
-        if (string.IsNullOrWhiteSpace(Destination))
-        {
-            throw new ArgumentNullException(nameof(Destination));
-        }
+        if (string.IsNullOrWhiteSpace(Destination)) throw new ArgumentNullException(nameof(Destination));
 
         _consoleWrapper.WriteLine("Comparing key vault secrets...");
 
@@ -84,9 +78,7 @@ public class SecretCommand
         _consoleWrapper.WriteLine("Options:");
 
         if (results.Any(r => r.Operation == DiffOperation.Add))
-        {
             _consoleWrapper.WriteLine($"[A] Add all new secrets to {source.VaultUri.Host}");
-        }
 
         _consoleWrapper.WriteLine("[Q] Quit");
 

@@ -3,7 +3,7 @@ using FluentAssertions;
 
 namespace tests.Secret;
 
-public class SecretWriterTests: SecretsTestBase
+public class SecretWriterTests : SecretsTestBase
 {
     [Fact]
     public async Task GetDiff_DisplaysAdds_WhenDoNotExistInDestination()
