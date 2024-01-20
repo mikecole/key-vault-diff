@@ -15,12 +15,8 @@ public static class LowKeyManagementApi
         var client = new HttpClient(handler);
         client.BaseAddress = new Uri("https://localhost:8443/");
 
-        var response = await client.PostAsync("management/vault", JsonContent.Create(new
-        {
-            BaseUri = vaultUri,
-            RecoveryLevel = "Recoverable",
-            RecoverableDays = 90
-        }));
+        var response = await client.PostAsync("management/vault",
+            JsonContent.Create(new { BaseUri = vaultUri, RecoveryLevel = "Recoverable", RecoverableDays = 90 }));
 
         response.EnsureSuccessStatusCode();
     }
@@ -31,10 +27,7 @@ public static class LowKeyManagementApi
         handler.ClientCertificateOptions = ClientCertificateOption.Manual;
         handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
 
-        var client = new HttpClient(handler)
-        {
-            BaseAddress = new Uri("https://localhost:8443/")
-        };
+        var client = new HttpClient(handler) { BaseAddress = new Uri("https://localhost:8443/") };
 
         client.DefaultRequestHeaders
             .Accept
@@ -55,10 +48,7 @@ public static class LowKeyManagementApi
         handler.ClientCertificateOptions = ClientCertificateOption.Manual;
         handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
 
-        var client = new HttpClient(handler)
-        {
-            BaseAddress = new Uri("https://localhost:8443/")
-        };
+        var client = new HttpClient(handler) { BaseAddress = new Uri("https://localhost:8443/") };
 
         client.DefaultRequestHeaders
             .Accept

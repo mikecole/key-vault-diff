@@ -19,8 +19,7 @@ public class SecretDiffEngineTests : SecretsTestBase
 
         result.Should().BeEquivalentTo(new List<SecretDiffResult>
         {
-            new("Foo", DiffOperation.Add),
-            new("Bar", DiffOperation.Add)
+            new("Foo", DiffOperation.Add), new("Bar", DiffOperation.Add)
         });
     }
 
@@ -37,8 +36,7 @@ public class SecretDiffEngineTests : SecretsTestBase
 
         result.Should().BeEquivalentTo(new List<SecretDiffResult>
         {
-            new("Foo", DiffOperation.Delete),
-            new("Bar", DiffOperation.Delete)
+            new("Foo", DiffOperation.Delete), new("Bar", DiffOperation.Delete)
         });
     }
 
@@ -57,8 +55,7 @@ public class SecretDiffEngineTests : SecretsTestBase
 
         result.Should().BeEquivalentTo(new List<SecretDiffResult>
         {
-            new("Foo", DiffOperation.Equals),
-            new("Bar", DiffOperation.Equals)
+            new("Foo", DiffOperation.Equals), new("Bar", DiffOperation.Equals)
         });
     }
 
@@ -77,8 +74,7 @@ public class SecretDiffEngineTests : SecretsTestBase
 
         result.Should().BeEquivalentTo(new List<SecretDiffResult>
         {
-            new("Foo", DiffOperation.Modify),
-            new("Bar", DiffOperation.Modify)
+            new("Foo", DiffOperation.Modify), new("Bar", DiffOperation.Modify)
         });
     }
 
@@ -97,13 +93,15 @@ public class SecretDiffEngineTests : SecretsTestBase
         var sut = new SecretDiffEngine();
         var result = await sut.GetDiff(vaults.SourceClient, vaults.DestinationClient);
 
-        result.Should().BeEquivalentTo(new List<SecretDiffResult>
-        {
-            new("Bar", DiffOperation.Modify),
-            new("Baz", DiffOperation.Equals),
-            new("Foo", DiffOperation.Add),
-            new("Quz", DiffOperation.Delete)
-        }, options => options.WithStrictOrdering());
+        result.Should()
+            .BeEquivalentTo(
+                new List<SecretDiffResult>
+                {
+                    new("Bar", DiffOperation.Modify),
+                    new("Baz", DiffOperation.Equals),
+                    new("Foo", DiffOperation.Add),
+                    new("Quz", DiffOperation.Delete)
+                }, options => options.WithStrictOrdering());
     }
 
     [Fact]

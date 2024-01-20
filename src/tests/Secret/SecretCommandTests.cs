@@ -19,8 +19,7 @@ public class SecretCommandTests
 
         _sut = new SecretCommand(_secretDiffEngine.Object, _consoleWrapper, _secretWriter.Object)
         {
-            Source = "source",
-            Destination = "destination"
+            Source = "source", Destination = "destination"
         };
 
         _consoleWrapper.ConsoleKeyQueue.Add(ConsoleKey.Q);
@@ -61,10 +60,7 @@ Modify  ~");
     [Fact]
     public async Task RunAsync_ShowsAddOption_WhenAddsExist()
     {
-        SetDiffResults(new List<SecretDiffResult>
-        {
-            new("Add", DiffOperation.Add)
-        });
+        SetDiffResults(new List<SecretDiffResult> { new("Add", DiffOperation.Add) });
 
         await _sut.RunAsync();
 
@@ -74,10 +70,7 @@ Modify  ~");
     [Fact]
     public async Task RunAsync_HidesAddOption_WhenAddsDoNotExist()
     {
-        SetDiffResults(new List<SecretDiffResult>
-        {
-            new("Delete", DiffOperation.Delete)
-        });
+        SetDiffResults(new List<SecretDiffResult> { new("Delete", DiffOperation.Delete) });
 
         await _sut.RunAsync();
 
@@ -87,10 +80,7 @@ Modify  ~");
     [Fact]
     public async Task RunAsync_QuitsWithMessage_WithQInput()
     {
-        SetDiffResults(new List<SecretDiffResult>
-        {
-            new("Delete", DiffOperation.Delete)
-        });
+        SetDiffResults(new List<SecretDiffResult> { new("Delete", DiffOperation.Delete) });
 
         await _sut.RunAsync();
 
@@ -102,10 +92,7 @@ Modify  ~");
     {
         _consoleWrapper.ConsoleKeyQueue = new List<ConsoleKey> { ConsoleKey.B };
 
-        SetDiffResults(new List<SecretDiffResult>
-        {
-            new("Delete", DiffOperation.Delete)
-        });
+        SetDiffResults(new List<SecretDiffResult> { new("Delete", DiffOperation.Delete) });
 
         await _sut.RunAsync();
 
@@ -117,11 +104,7 @@ Modify  ~");
     {
         _consoleWrapper.ConsoleKeyQueue = new List<ConsoleKey> { ConsoleKey.A, ConsoleKey.Q };
 
-        SetDiffResults(new List<SecretDiffResult>
-        {
-            new("Foo", DiffOperation.Add),
-            new("Bar", DiffOperation.Add)
-        });
+        SetDiffResults(new List<SecretDiffResult> { new("Foo", DiffOperation.Add), new("Bar", DiffOperation.Add) });
 
         await _sut.RunAsync();
 

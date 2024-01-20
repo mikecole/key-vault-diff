@@ -11,7 +11,10 @@ public class ConsoleWrapperStub : IConsoleWrapper
 
     public ConsoleKeyInfo ReadKey()
     {
-        if (!ConsoleKeyQueue.Any()) throw new Exception("No input keys available.");
+        if (!ConsoleKeyQueue.Any())
+        {
+            throw new Exception("No input keys available.");
+        }
 
         var result = ConsoleKeyQueue.First();
         ConsoleKeyQueue.Remove(result);

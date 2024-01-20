@@ -26,9 +26,15 @@ public class SecretCommand
 
     public async Task RunAsync()
     {
-        if (string.IsNullOrWhiteSpace(Source)) throw new ArgumentNullException(nameof(Source));
+        if (string.IsNullOrWhiteSpace(Source))
+        {
+            throw new ArgumentNullException(nameof(Source));
+        }
 
-        if (string.IsNullOrWhiteSpace(Destination)) throw new ArgumentNullException(nameof(Destination));
+        if (string.IsNullOrWhiteSpace(Destination))
+        {
+            throw new ArgumentNullException(nameof(Destination));
+        }
 
         _consoleWrapper.WriteLine("Comparing key vault secrets...");
 
@@ -78,7 +84,9 @@ public class SecretCommand
         _consoleWrapper.WriteLine("Options:");
 
         if (results.Any(r => r.Operation == DiffOperation.Add))
+        {
             _consoleWrapper.WriteLine($"[A] Add all new secrets to {source.VaultUri.Host}");
+        }
 
         _consoleWrapper.WriteLine("[Q] Quit");
 

@@ -29,10 +29,7 @@ public abstract class SecretsTestBase
     {
         var credentials = new NoopCredentials();
 
-        var options = new SecretClientOptions
-        {
-            DisableChallengeResourceVerification = true
-        };
+        var options = new SecretClientOptions { DisableChallengeResourceVerification = true };
 
         return new SecretClient(uri, credentials, FakeClientOptions.GetClientOptions(options));
     }
