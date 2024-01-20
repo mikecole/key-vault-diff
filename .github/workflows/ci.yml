@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  version_prefix: 0.0
+  version_prefix: '0.0'
 
 jobs:
   build_and_publish:
