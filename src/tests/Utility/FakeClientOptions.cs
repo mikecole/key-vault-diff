@@ -10,7 +10,7 @@ public static class FakeClientOptions
         var clientHandler = new HttpClientHandler();
         clientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
         options.Transport = new HttpClientTransport(clientHandler);
-        
+
         return options;
     }
 }

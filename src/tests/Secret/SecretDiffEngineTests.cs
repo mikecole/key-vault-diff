@@ -20,7 +20,7 @@ public class SecretDiffEngineTests : SecretsTestBase
         result.Should().BeEquivalentTo(new List<SecretDiffResult>
         {
             new("Foo", DiffOperation.Add),
-            new("Bar", DiffOperation.Add),
+            new("Bar", DiffOperation.Add)
         });
     }
 
@@ -38,7 +38,7 @@ public class SecretDiffEngineTests : SecretsTestBase
         result.Should().BeEquivalentTo(new List<SecretDiffResult>
         {
             new("Foo", DiffOperation.Delete),
-            new("Bar", DiffOperation.Delete),
+            new("Bar", DiffOperation.Delete)
         });
     }
 
@@ -58,10 +58,10 @@ public class SecretDiffEngineTests : SecretsTestBase
         result.Should().BeEquivalentTo(new List<SecretDiffResult>
         {
             new("Foo", DiffOperation.Equals),
-            new("Bar", DiffOperation.Equals),
+            new("Bar", DiffOperation.Equals)
         });
     }
-    
+
     [Fact]
     public async Task GetDiff_DisplaysModify_WhenDifferentInBoth()
     {
@@ -78,10 +78,10 @@ public class SecretDiffEngineTests : SecretsTestBase
         result.Should().BeEquivalentTo(new List<SecretDiffResult>
         {
             new("Foo", DiffOperation.Modify),
-            new("Bar", DiffOperation.Modify),
+            new("Bar", DiffOperation.Modify)
         });
     }
-    
+
     [Fact]
     public async Task GetDiff_AggregatesAllOperationsInAlphabeticalOrderByName()
     {
@@ -102,7 +102,7 @@ public class SecretDiffEngineTests : SecretsTestBase
             new("Bar", DiffOperation.Modify),
             new("Baz", DiffOperation.Equals),
             new("Foo", DiffOperation.Add),
-            new("Quz", DiffOperation.Delete),
+            new("Quz", DiffOperation.Delete)
         }, options => options.WithStrictOrdering());
     }
 
@@ -110,9 +110,9 @@ public class SecretDiffEngineTests : SecretsTestBase
     public async Task GetDiff_DoesNotIncludeManagedSecrets()
     {
         var vaults = await GetCleanVaults();
-        
-       var certificateClient = GetKeyVaultCertificateClient(vaults.DestinationClient.VaultUri);
-       
+
+        var certificateClient = GetKeyVaultCertificateClient(vaults.DestinationClient.VaultUri);
+
         var certificatePolicy = new CertificatePolicy("Self", "CN=example.com")
         {
             KeyType = CertificateKeyType.Ec,
@@ -121,11 +121,11 @@ public class SecretDiffEngineTests : SecretsTestBase
             ContentType = CertificateContentType.Pkcs12,
             ValidityInMonths = 12
         };
-        
+
         //Creating a certificate will also create a managed secret
         var foo = await certificateClient.StartCreateCertificateAsync("test-cert", certificatePolicy, true);
         await foo.WaitForCompletionAsync();
-        
+
         var sut = new SecretDiffEngine();
         var result = await sut.GetDiff(vaults.SourceClient, vaults.DestinationClient);
 

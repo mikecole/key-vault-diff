@@ -2,9 +2,10 @@
 
 namespace tests.Utility;
 
-public class NoopCredentials: TokenCredential
+public class NoopCredentials : TokenCredential
 {
-    public override ValueTask<AccessToken> GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+    public override ValueTask<AccessToken> GetTokenAsync(TokenRequestContext requestContext,
+        CancellationToken cancellationToken)
     {
         return ValueTask.FromResult(GetToken(requestContext, cancellationToken));
     }

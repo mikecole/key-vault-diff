@@ -19,7 +19,7 @@ public class ConsoleWrapper : IConsoleWrapper
     {
         Console.Write(value);
     }
-    
+
     public void WriteLine(string? value)
     {
         Console.WriteLine(value);

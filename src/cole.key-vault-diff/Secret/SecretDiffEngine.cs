@@ -14,7 +14,7 @@ public class SecretDiffEngine : ISecretDiffEngine
         var sourceSecrets = await sourceClient.GetPropertiesOfSecretsAsync()
             .Where(c => !c.Managed)
             .ToDictionaryAsync(c => c.Name);
-        
+
         var destinationSecrets = await destinationClient.GetPropertiesOfSecretsAsync()
             .Where(c => !c.Managed)
             .ToDictionaryAsync(c => c.Name);
@@ -63,5 +63,5 @@ public enum DiffOperation
     Add,
     Delete,
     Equals,
-    Modify,
+    Modify
 }
