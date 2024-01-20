@@ -21,30 +21,28 @@ public abstract class SecretsTestBase
         await LowKeyManagementApi.PurgeDeletedVault(destinationUri);
         await LowKeyManagementApi.CreateVault(destinationUri);
 
-        return new(GetKeyVaultSecretClient(new Uri(sourceUri)), GetKeyVaultSecretClient(new Uri(destinationUri)));
+        return new ValueTuple<SecretClient, SecretClient>(GetKeyVaultSecretClient(new Uri(sourceUri)),
+            GetKeyVaultSecretClient(new Uri(destinationUri)));
     }
-    
+
     private SecretClient GetKeyVaultSecretClient(Uri uri)
     {
         var credentials = new NoopCredentials();
-        
-        var options = new SecretClientOptions
-        {
-            DisableChallengeResourceVerification = true
-        };
-        
+
+        var options = new SecretClientOptions { DisableChallengeResourceVerification = true };
+
         return new SecretClient(uri, credentials, FakeClientOptions.GetClientOptions(options));
     }
-    
+
     protected CertificateClient GetKeyVaultCertificateClient(Uri uri)
     {
         var credentials = new NoopCredentials();
-        
+
         var options = new CertificateClientOptions(CertificateClientOptions.ServiceVersion.V7_3)
         {
-            DisableChallengeResourceVerification = true,
+            DisableChallengeResourceVerification = true
         };
-        
+
         return new CertificateClient(uri, credentials, FakeClientOptions.GetClientOptions(options));
     }
 }
