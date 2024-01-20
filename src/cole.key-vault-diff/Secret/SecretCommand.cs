@@ -4,7 +4,7 @@ using DotMake.CommandLine;
 
 namespace cole.key_vault_diff.Secret;
 
-[CliCommand(Description = "Secret sub-command", Parent = typeof(RootCommand))]
+[CliCommand(Description = "Performs a diff on Key Vault secrets", Parent = typeof(RootCommand))]
 public class SecretCommand
 {
     private readonly IConsoleWrapper _consoleWrapper;
@@ -18,10 +18,10 @@ public class SecretCommand
         _secretWriter = secretWriter;
     }
 
-    [CliOption(Description = "Source Key Vault Name", Required = false)]
+    [CliOption(Description = "Source Key Vault name", Required = true)]
     public string? Source { get; set; }
 
-    [CliOption(Description = "Destination Key Vault Name", Required = false)]
+    [CliOption(Description = "Destination Key Vault name", Required = true)]
     public string? Destination { get; set; }
 
     public async Task RunAsync()
