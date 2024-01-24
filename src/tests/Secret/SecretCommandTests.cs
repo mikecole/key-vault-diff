@@ -64,7 +64,7 @@ Modify  ~");
 
         await _sut.RunAsync();
 
-        _consoleWrapper.GetOutput().Should().Contain("[A] Add all new secrets to source.vault.azure.net");
+        _consoleWrapper.GetOutput().Should().Contain("[A] Add all new secrets to destination.vault.azure.net");
     }
 
     [Fact]
@@ -74,7 +74,7 @@ Modify  ~");
 
         await _sut.RunAsync();
 
-        _consoleWrapper.GetOutput().Should().NotContain("[A] Add all new secrets to source.vault.azure.net");
+        _consoleWrapper.GetOutput().Should().NotContain("[A] Add all new secrets to destination.vault.azure.net");
     }
 
     [Fact]
